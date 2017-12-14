@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:dep="http://schemas.microsoft.com/wix/DependencyExtension">
+    <Product Id="*"
+        Name="ChildProduct"
+        Language="1033"
+        Version="1.2.3.4"
+        Manufacturer="Child Company"
+        UpgradeCode="3F7C258D-D782-4DD5-8332-151CA46143D2">
+
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+        <MajorUpgrade Disallow="yes"
+            AllowDowngrades="no"
+            AllowSameVersionUpgrades="no"
+            DisallowUpgradeErrorMessage="An older version of [ProductName] is already installed. You must uninstall it before you can install this version."
+            DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <Media Id="1" Cabinet="client.cab" EmbedCab="yes" />
+
+        <Feature Id="ProductFeature" Title="Complete" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLFOLDER" Name="ChildProduct" />
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <Component Id="ProductComponent" Guid="{3EB1D586-7CA3-41BD-AD44-791C54A433CD}">
+                <File Source="child.txt" Vital="yes"/>
+                <dep:Provides>
+                    <dep:Requires
+                        ProviderKey="WinFSPprovider"
+                        IncludeMinimum="yes"
+                        IncludeMaximum="yes"
+                        Minimum="1.1.0.0"
+                        Maximum="1.1.99.99"
+                        />
+                </dep:Provides>
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
